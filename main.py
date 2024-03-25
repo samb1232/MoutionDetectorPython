@@ -4,6 +4,7 @@ from time import time
 import cv2
 import numpy as np
 
+from fps_counter import FpsCounter
 from sort import Sort
 
 
@@ -27,19 +28,10 @@ prev_frame_blur = None
 sort = Sort(max_age=400, min_hits=7, iou_threshold=0.2)
 
 # FPS counter init
-fps_counter = 0
-start_time = time()
-fps = 0
+fps_counter = FpsCounter()
 
 while ret:
-    # FPS counter
-    fps_counter += 1
-    cur_time = time()
-    time_diff = cur_time - start_time
-    if time_diff > 1.0:
-        fps = fps_counter / np.round(time_diff)
-        start_time = time()
-        fps_counter = 0
+    fps_counter.update()
 
     frame = cv2.resize(frame, [1280, 720])
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -77,7 +69,7 @@ while ret:
     boxes_ids = res[:, -1].astype(int)
 
     frame = draw_bounding_boxes_with_id(frame, boxes_track, boxes_ids)
-
+    fps = fps_counter.get_fps()
     cv2.putText(frame, f'FPS: {int(fps)}', (20, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
     cv2.imshow("Motion tracking", frame)
