@@ -7,6 +7,16 @@ import numpy as np
 from sort import Sort
 
 
+def is_contour_inside(contour, larger_contour):
+    x, y, w, h = cv2.boundingRect(np.array(larger_contour))  # Convert to numpy array
+    x1, y1, w1, h1 = cv2.boundingRect(np.array(contour))  # Convert to numpy array
+
+    if x1 >= x and y1 >= y and x1 + w1 <= x + w and y1 + h1 <= y + h:
+        return True
+    else:
+        return False
+
+
 def draw_bounding_boxes_with_id(frame, bboxes, ids):
     for bbox, id_ in zip(bboxes, ids):
         cv2.rectangle(frame, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])), (0, 0, 255), 2)
@@ -16,23 +26,20 @@ def draw_bounding_boxes_with_id(frame, bboxes, ids):
     return frame
 
 
-video_src = os.path.join("videos", "vid1.mp4")
+video_src = os.path.join("videos", "vid4.mp4")
 
 cap = cv2.VideoCapture(video_src)
 
 ret, frame = cap.read()
 prev_frame_blur = None
 
-# SORT
 sort = Sort(max_age=400, min_hits=7, iou_threshold=0.2)
 
-# FPS counter init
 fps_counter = 0
 start_time = time()
 fps = 0
 
 while ret:
-    # FPS counter
     fps_counter += 1
     cur_time = time()
     time_diff = cur_time - start_time
@@ -60,14 +67,21 @@ while ret:
     detections_list = []
 
     for contour in contours:
-        x, y, w, h = cv2.boundingRect(contour)
-        if cv2.contourArea(contour) < 500:
-            continue
-        x1, y1 = x, y
-        x2, y2 = x + w, y + h
-        detections_list.append([x1, y1, x2, y2, 1])
+        if len(detections_list) > 0:
+            for larger_contour in detections_list:
+                if is_contour_inside(contour, larger_contour):
+                    break
+            else:
+                x, y, w, h = cv2.boundingRect(contour)
+                if cv2.contourArea(contour) < 3000:
+                    continue
+                detections_list.append([x, y, x + w, y + h, 1])
+        else:
+            x, y, w, h = cv2.boundingRect(contour)
+            if cv2.contourArea(contour) < 3000:
+                continue
+            detections_list.append([x, y, x + w, y + h, 1])
 
-        # SORT Tracking
     if len(detections_list) == 0:
         detections_list = np.empty((0, 5))
 
