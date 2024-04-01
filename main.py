@@ -10,7 +10,7 @@ from utils import remove_nan
 
 
 class MotionTracker:
-    # CONSTATNS
+    # CONSTANTS
     OUTPUT_VIDEO_SIZE = (1280, 720)
 
     # PARAMETERS
