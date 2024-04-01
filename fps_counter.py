@@ -20,4 +20,4 @@ class FpsCounter:
             self.fps_counter = 0
 
     def get_fps(self) -> int:
-        return self.fps
+        return int(self.fps)

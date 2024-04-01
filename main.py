@@ -107,35 +107,42 @@ class MotionTracker:
                 self.tracing_points_arr.pop(index)
         return frame
 
-    def process(self):
+    def process_frame(self, frame):
+        frame = cv2.resize(frame, self.OUTPUT_VIDEO_SIZE)
+
+        self.fps_counter.update()
+
+        detections_list = self.detect_movement(frame)
+
+        res = self.sort.update(detections_list)
+
+        # Remove rows with nan values
+        res = remove_nan(res)
+
+        boxes_track = res[:, :-1]
+        boxes_ids = res[:, -1].astype(int)
+
+        frame = self.draw_bounding_boxes_with_id(frame, boxes_track, boxes_ids)
+
+        for box in res:
+            id_ = box[4]
+            self.tracing_points_arr.append(
+                [int((box[0] + box[2]) / 2), int((box[1] + box[3]) / 2), self.TRACKING_POINTS_TTL, id_])
+
+        frame = self.draw_tracing_points(frame)
+
+        return frame
+
+    def print_video(self):
         while True:
             ret, frame = self.cap.read()
             if not ret:
                 break
-            self.fps_counter.update()
 
-            frame = cv2.resize(frame, self.OUTPUT_VIDEO_SIZE)
-            detections_list = self.detect_movement(frame)
-
-            res = self.sort.update(detections_list)
-
-            # Remove rows with nan values
-            res = remove_nan(res)
-
-            boxes_track = res[:, :-1]
-            boxes_ids = res[:, -1].astype(int)
-
-            frame = self.draw_bounding_boxes_with_id(frame, boxes_track, boxes_ids)
-
-            for box in res:
-                id_ = box[4]
-                self.tracing_points_arr.append(
-                    [int((box[0] + box[2]) / 2), int((box[1] + box[3]) / 2), self.TRACKING_POINTS_TTL, id_])
-
-            frame = self.draw_tracing_points(frame)
+            frame = self.process_frame(frame)
 
             fps = self.fps_counter.get_fps()
-            cv2.putText(frame, f'FPS: {int(fps)}', (20, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            cv2.putText(frame, f'FPS: {fps}', (20, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
             cv2.imshow("Motion tracking", frame)
             key = cv2.waitKey(10)
@@ -146,5 +153,6 @@ class MotionTracker:
         cv2.destroyAllWindows()
 
 
-m = MotionTracker(os.path.join("videos", "vid1.mp4"))
-m.process()
+if __name__ == "__main__":
+    m = MotionTracker(os.path.join("videos", "vid1.mp4"))
+    m.print_video()
