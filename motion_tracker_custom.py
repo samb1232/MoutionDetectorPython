@@ -1,22 +1,22 @@
-import os.path
+import os
 import random
 
 import cv2
 import numpy as np
 
-from fps_counter import FpsCounter
+from custom_methods import resize_frame, convert_to_grayscale, gaussian_blur, abs_diff, threshold, dilate, \
+    find_contours, bounding_rect, contour_area
+from drawing_methods import draw_bounding_boxes_with_id
 from ext_lib.sort import Sort
+from fps_counter import FpsCounter
 from utils import remove_nan
 
 
-class MotionTracker:
-    # CONSTANTS
-    OUTPUT_VIDEO_SIZE = (1280, 720)
-
+class MotionTrackerCustom:
     # PARAMETERS
     GAUSSIAN_KSIZE = (15, 15)
     GAUSSIAN_SIG_MAX = 40
-    DILATE_ITERATIONS = 10
+    DILATE_ITERATIONS = 3
 
     THRESHOLD_BW = 10
 
@@ -28,7 +28,7 @@ class MotionTracker:
 
     TRACKING_POINTS_TTL = 30
 
-    def __init__(self, video_source: str):
+    def __init__(self, video_source: str, output_video_size: tuple = (1280, 720)):
         self.tracing_points_arr = []
 
         self.cap = cv2.VideoCapture(video_source)
@@ -39,30 +39,33 @@ class MotionTracker:
         # Initialize FPS counter
         self.fps_counter = FpsCounter()
         self.prev_frame_blured = None
+        self.OUTPUT_VIDEO_SIZE = output_video_size
 
     def detect_movement(self, frame: np.ndarray):
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        blured = cv2.GaussianBlur(gray, self.GAUSSIAN_KSIZE, self.GAUSSIAN_SIG_MAX)
+        gray = convert_to_grayscale(frame)
+
+        blured = gaussian_blur(gray, self.GAUSSIAN_KSIZE, self.GAUSSIAN_SIG_MAX)
 
         if self.prev_frame_blured is None:
             self.prev_frame_blured = blured
             return np.empty((0, 5))
 
-        diff = cv2.absdiff(blured, self.prev_frame_blured)
+        diff = abs_diff(blured, self.prev_frame_blured)
 
         self.prev_frame_blured = blured
 
-        _, thresh = cv2.threshold(diff, self.THRESHOLD_BW, 255, cv2.THRESH_BINARY)
+        # Apply thresholding
+        thresh = threshold(diff, self.THRESHOLD_BW)
 
-        dilated = cv2.dilate(thresh, None, iterations=self.DILATE_ITERATIONS)
+        dilated = dilate(thresh, self.DILATE_ITERATIONS)
 
-        contours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        contours = find_contours(dilated)
 
         detections_list = []
 
         for contour in contours:
-            x, y, w, h = cv2.boundingRect(contour)
-            if cv2.contourArea(contour) < self.MINIMAL_BOX_CONTOUR_SIZE:
+            x, y, w, h = bounding_rect(contour)
+            if contour_area(contour) < self.MINIMAL_BOX_CONTOUR_SIZE:
                 continue
             x1, y1 = x, y
             x2, y2 = x + w, y + h
@@ -85,17 +88,6 @@ class MotionTracker:
 
         return np.array(detections_list)
 
-    @staticmethod
-    def draw_bounding_boxes_with_id(frame: np.ndarray, bboxes: np.ndarray, ids: np.ndarray) -> np.ndarray:
-
-        for bbox, id_ in zip(bboxes, ids):
-            random.seed(int(id_))
-            color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-            cv2.rectangle(frame, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])), color, 2)
-            # cv2.putText(frame, "ID: " + str(id_), (int(bbox[0]), int(bbox[1]) - 10), cv2.FONT_HERSHEY_SIMPLEX,
-            #             0.9, color, 2)
-        return frame
-
     def draw_tracing_points(self, frame):
         for index, point in enumerate(self.tracing_points_arr):
             id_ = point[3]
@@ -107,8 +99,8 @@ class MotionTracker:
                 self.tracing_points_arr.pop(index)
         return frame
 
-    def process_frame(self, frame):
-        frame = cv2.resize(frame, self.OUTPUT_VIDEO_SIZE)
+    def process_frame(self, frame) -> np.ndarray:
+        frame = resize_frame(frame, self.OUTPUT_VIDEO_SIZE)
 
         self.fps_counter.update()
 
@@ -122,7 +114,7 @@ class MotionTracker:
         boxes_track = res[:, :-1]
         boxes_ids = res[:, -1].astype(int)
 
-        frame = self.draw_bounding_boxes_with_id(frame, boxes_track, boxes_ids)
+        frame = draw_bounding_boxes_with_id(frame, boxes_track, boxes_ids)
 
         for box in res:
             id_ = box[4]
@@ -133,13 +125,19 @@ class MotionTracker:
 
         return frame
 
+    def get_next_frame(self) -> np.ndarray | None:
+        ret, frame = self.cap.read()
+        if not ret:
+            return None
+
+        frame = self.process_frame(frame)
+        return frame
+
     def print_video(self):
         while True:
-            ret, frame = self.cap.read()
-            if not ret:
-                break
-
-            frame = self.process_frame(frame)
+            frame = self.get_next_frame()
+            if frame is None:
+                return
 
             fps = self.fps_counter.get_fps()
             cv2.putText(frame, f'FPS: {fps}', (20, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
@@ -152,7 +150,11 @@ class MotionTracker:
         self.cap.release()
         cv2.destroyAllWindows()
 
+    def close(self):
+        if self.cap.isOpened():
+            self.cap.release()
+
 
 if __name__ == "__main__":
-    m = MotionTracker(os.path.join("videos", "vid1.mp4"))
+    m = MotionTrackerCustom(os.path.join("videos", "vid3.mp4"), (360, 640))
     m.print_video()
