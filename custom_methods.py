@@ -1,10 +1,10 @@
 from collections import deque
 from typing import Sequence
 
-from numba import jit
 # Numba - это библиотека для ускорения выполнения Python-кода с использованием JIT (just-in-time) компиляции.
 # Мы можем использовать ее, чтобы ускорить выполнение кода.
 import numpy as np
+from numba import jit
 
 
 def resize_frame(frame, output_size: tuple):
@@ -154,3 +154,41 @@ def contour_area(contour):
         x2, y2 = contour[(i + 1) % len(contour)]
         area += (x1 * y2 - x2 * y1)
     return abs(area) / 2.0
+
+
+def findContours_1(self, mask):
+    height, width = mask.shape
+    visited = np.zeros((height, width), dtype=bool)
+    rectangles = []
+
+    for y in range(0, height, self.step):
+        for x in range(0, width, self.step):
+            if not visited[y][x] and mask[y][x] != 0:
+                contour = []
+                queue = [(x, y)]
+
+                while queue:
+                    cur_x, cur_y = queue.pop(0)
+                    if (
+                            0 <= cur_x < width
+                            and 0 <= cur_y < height
+                            and not visited[cur_y][cur_x]
+                            and mask[cur_y][cur_x]
+                    ):
+                        visited[cur_y][cur_x] = True
+                        contour.append((cur_x, cur_y))
+
+                        for dx in range(-self.step, self.step + 1, self.step // 4):
+                            for dy in range(-self.step, self.step + 1, self.step // 4):
+                                new_x, new_y = cur_x + dx, cur_y + dy
+                                if (
+                                        0 <= new_x < width
+                                        and 0 <= new_y < height
+                                        and not visited[new_y][new_x]
+                                        and mask[new_y][new_x]
+                                ):
+                                    queue.append((new_x, new_y))
+
+                if contour:
+                    rectangles.append(contour)
+    return rectangles

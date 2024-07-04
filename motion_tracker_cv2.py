@@ -11,22 +11,28 @@ from utils import remove_nan
 
 
 class MotionTrackerCV2:
-    # PARAMETERS
-    GAUSSIAN_KSIZE = (15, 15)
-    GAUSSIAN_SIG_MAX = 40
-    DILATE_ITERATIONS = 10
 
-    THRESHOLD_BW = 10
+    def __init__(self, config):
+        conf_detector = config[config["default"]["param_name"] + "_cv2"]
+        conf_def = config["default"]
+        # PARAMETERS
+        self.GAUSSIAN_KSIZE = conf_detector["gaussian_ksize"]
+        self.GAUSSIAN_SIG_MAX = conf_detector["gaussian_sig_max"]
+        self.DILATE_ITERATIONS = conf_detector["dilate_iterations"]
 
-    MINIMAL_BOX_CONTOUR_SIZE = 500
+        self.THRESHOLD_BW = conf_detector["threshold_bw"]
 
-    SORT_MAX_AGE = 400
-    SORT_MIN_HITS = 7
-    SORT_IOU_THRESHOLD = 0.2
+        self.MINIMAL_BOX_CONTOUR_SIZE = conf_detector["minimal_box_contour_size"]
 
-    TRACKING_POINTS_TTL = 30
+        self.SORT_MAX_AGE = conf_detector["sort_max_age"]
+        self.SORT_MIN_HITS = conf_detector["sort_min_hits"]
+        self.SORT_IOU_THRESHOLD = conf_detector["sort_iou_threshold"]
 
-    def __init__(self, video_source: str, output_video_size: tuple = (1280, 720)):
+        self.TRACKING_POINTS_TTL = conf_def["tracking_points_ttl"]
+
+        video_source = conf_def["video_src"]
+        self.OUTPUT_VIDEO_SIZE = conf_def["output_video_size"]
+
         self.tracing_points_arr = []
 
         self.cap = cv2.VideoCapture(video_source)
@@ -37,7 +43,6 @@ class MotionTrackerCV2:
         # Initialize FPS counter
         self.fps_counter = FpsCounter()
         self.prev_frame_blured = None
-        self.OUTPUT_VIDEO_SIZE = output_video_size
 
     def detect_movement(self, frame: np.ndarray):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -138,7 +143,7 @@ class MotionTrackerCV2:
             fps = self.fps_counter.get_fps()
             cv2.putText(frame, f'FPS: {fps}', (20, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
-            cv2.imshow("Motion tracking", frame)
+            cv2.imshow("Motion tracking CV2", frame)
             key = cv2.waitKey(10)
             if key == 27:
                 break
@@ -152,5 +157,5 @@ class MotionTrackerCV2:
 
 
 if __name__ == "__main__":
-    m = MotionTrackerCV2(os.path.join("videos", "vid3.mp4"), (640, 360))
+    m = MotionTrackerCV2(os.path.join("videos", "vid1.mp4"), (640, 360))
     m.print_video()

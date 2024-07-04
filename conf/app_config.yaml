@@ -1,0 +1,99 @@
+# --------------------------------------------- HYDRA -----------------------------------------------------
+defaults:
+  - _self_
+  - override hydra/hydra_logging: disabled
+  - override hydra/job_logging: default
+
+hydra:
+  output_subdir: null
+  run:
+    dir: .
+
+default:
+  video_src: videos/vid_cars.mp4
+  output_video_size: [1280, 720]
+  tracking_points_ttl: 30
+  param_name: detector_def
+
+# ----------------------Default----------------------------
+detector_def_cv2:
+  gaussian_ksize: [9, 9]
+  gaussian_sig_max: 1.2
+  dilate_iterations: 4
+
+  threshold_bw: 15
+
+  minimal_box_contour_size: 550
+
+  sort_max_age: 50
+  sort_min_hits: 5
+  sort_iou_threshold: 0.2
+
+
+detector_def_custom:
+  gaussian_ksize: [7, 7]
+  gaussian_sig_max: 1.2
+  dilate_iterations: 6
+
+  threshold_bw: 20
+
+  minimal_box_contour_size: 650
+
+  sort_max_age: 50
+  sort_min_hits: 8
+  sort_iou_threshold: 0.2
+
+
+# ----------------------With snow----------------------------
+detector_snow_cv2:
+  gaussian_ksize: [11, 11]
+  gaussian_sig_max: 1.2
+  dilate_iterations: 5
+  threshold_bw: 22
+  minimal_box_contour_size: 70
+
+  sort_max_age: 40
+  sort_min_hits: 7
+  sort_iou_threshold: 0.2
+
+
+detector_snow_custom:
+  gaussian_ksize: [7, 7]
+  gaussian_sig_max: 1.5
+  dilate_iterations: 6
+  threshold_bw: 21
+  minimal_box_contour_size: 70
+
+  sort_max_age: 50
+  sort_min_hits: 8
+  sort_iou_threshold: 0.2
+
+
+
+# ----------------------Shaked----------------------------
+detector_shaked_cv2:
+  gaussian_ksize: [9, 9]
+  gaussian_sig_max: 1.2
+  dilate_iterations: 4
+
+  threshold_bw: 18
+
+  minimal_box_contour_size: 550
+
+  sort_max_age: 50
+  sort_min_hits: 7
+  sort_iou_threshold: 0.2
+
+
+detector_shaked_custom:
+  gaussian_ksize: [7, 7]
+  gaussian_sig_max: 1.2
+  dilate_iterations: 5
+
+  threshold_bw: 20
+
+  minimal_box_contour_size: 650
+
+  sort_max_age: 50
+  sort_min_hits: 10
+  sort_iou_threshold: 0.2

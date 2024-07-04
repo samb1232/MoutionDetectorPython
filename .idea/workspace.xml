@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="73f3ad6a-68c2-4899-a70d-1dce4b35f443" name="Changes" comment="converted main file to class MotionTracker">
-      <change afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
+    <list default="true" id="73f3ad6a-68c2-4899-a70d-1dce4b35f443" name="Changes" comment="added custom tracker">
+      <change afterPath="$PROJECT_DIR$/conf/app_config.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/video_stabilaser.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom_methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom_methods.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/motion_tracker_custom.py" beforeDir="false" afterPath="$PROJECT_DIR$/motion_tracker_custom.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/motion_tracker_cv2.py" beforeDir="false" afterPath="$PROJECT_DIR$/motion_tracker_cv2.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,24 +36,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.denseOpticalFlow.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.optical_flow.executor": "Run",
-    "Python.test.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.VideoPlayer.executor&quot;: &quot;Run&quot;,
+    &quot;Python.custom_methods.executor&quot;: &quot;Run&quot;,
+    &quot;Python.denseOpticalFlow.executor&quot;: &quot;Run&quot;,
+    &quot;Python.gui_test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.motion_tracker_custom.executor&quot;: &quot;Run&quot;,
+    &quot;Python.motion_tracker_cv2 (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.optical_flow.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test].executor&quot;: &quot;Run&quot;,
+    &quot;Python.video_stabilaser.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/DATA/Projects/PyCharmProjects/MotionDetection&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\DATA\Projects\PyCharmProjects\MotionDetection" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\DATA\Projects\PyCharmProjects\MotionDetection\ext_lib" />
       <recent name="C:\DATA\Projects\PyCharmProjects\MotionDetection" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.test">
-    <configuration name="denseOpticalFlow" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.main (1)">
+    <configuration name="gui_test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MotionDetection" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -64,7 +79,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/denseOpticalFlow.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gui_test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -73,7 +88,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+    <configuration name="main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MotionDetection" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -95,7 +110,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="optical_flow" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="motion_tracker_cv2 (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MotionDetection" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -108,7 +123,29 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/optical_flow.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/motion_tracker_cv2.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="motion_tracker_cv2" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="MotionDetection" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\DATA\Projects\PyCharmProjects\MotionDetection\motion_tracker_cv2.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -139,11 +176,35 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="video_stabilaser" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MotionDetection" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/video_stabilaser.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.main (1)" />
+        <item itemvalue="Python.video_stabilaser" />
+        <item itemvalue="Python.gui_test" />
+        <item itemvalue="Python.motion_tracker_cv2 (1)" />
         <item itemvalue="Python.test" />
-        <item itemvalue="Python.denseOpticalFlow" />
-        <item itemvalue="Python.optical_flow" />
       </list>
     </recent_temporary>
   </component>
@@ -203,7 +264,47 @@
       <option name="project" value="LOCAL" />
       <updated>1711374092106</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="added tracking trajectory">
+      <option name="closed" value="true" />
+      <created>1711987995620</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1711987995620</updated>
+    </task>
+    <task id="LOCAL-00007" summary="added tracking trajectory">
+      <option name="closed" value="true" />
+      <created>1711988028938</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1711988028938</updated>
+    </task>
+    <task id="LOCAL-00008" summary="added .gitignore">
+      <option name="closed" value="true" />
+      <created>1711988953230</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1711988953230</updated>
+    </task>
+    <task id="LOCAL-00009" summary="updated .gitignore">
+      <option name="closed" value="true" />
+      <created>1711988973424</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1711988973424</updated>
+    </task>
+    <task id="LOCAL-00010" summary="added custom tracker">
+      <option name="closed" value="true" />
+      <created>1714218160440</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1714218160440</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -211,6 +312,10 @@
     <MESSAGE value="Added sort tracking and boxes" />
     <MESSAGE value="Added fps tracker class" />
     <MESSAGE value="converted main file to class MotionTracker" />
-    <option name="LAST_COMMIT_MESSAGE" value="converted main file to class MotionTracker" />
+    <MESSAGE value="added tracking trajectory" />
+    <MESSAGE value="added .gitignore" />
+    <MESSAGE value="updated .gitignore" />
+    <MESSAGE value="added custom tracker" />
+    <option name="LAST_COMMIT_MESSAGE" value="added custom tracker" />
   </component>
 </project>
